@@ -6,7 +6,7 @@ In this post I will describe how to use Docker to plug together Consul, Consul T
 
 <!-- FOLD -->
 
-# Docker
+## Docker
 
 Docker is an API wrapper around LXC (Linux containers) so will only run on Linux. Since I am on OSX (as many of you probably are) I have written a post about [how to get Docker running in OSX using boot2docker](http://www.maori.geek.nz/post/boot_2_docker_how_to_set_up_postgres_elasticsearch_and_redis_on_mac_os_x). This is briefly described below:
 
@@ -29,7 +29,7 @@ You can test Docker is correctly installed using:
 docker ps
 ```
 
-# Build a very simple Web Service with Docker
+## Build a very simple Web Service with Docker
 
 To test the Dr CoN architecture we will need a service. For this, let create the simplest service that I know how (further described [here](http://www.maori.geek.nz/post/the_smallest_docker_web_service_that_could)). Create a file called `Dockerfile` with the contents:
 
@@ -58,7 +58,7 @@ To test that it is running we can call the service with `curl`:
 curl $DOCKER_IP:8000
 ```
 
-# Consul
+## Consul
 
 Consul is best described as a service that has a DNS and a HTTP API. It also has many other features like health checking services, clustering across multiple machines and acting as a key-value store. To run Consul in a Docker container execute:
 
@@ -147,7 +147,7 @@ SRV records are difficult to use because they are not supported by many technolo
 The container [srv-router](https://github.com/vlipco/srv-router) can be 
 used with Consul and nginx to route incoming calls to the correct services, as [described here](http://www.maori.geek.nz/post/docker_web_services_with_consul). However there is an easier way than that to use nginx to route to services.
 
-# Registrator
+## Registrator
 
 Registrator takes environment variables defined when a Docker container is started and automatically registers it with Consul. For example:
 
@@ -168,7 +168,7 @@ docker run -it \
 
 Will automatically add the service to Consul, and stopping it will remove it. This is the first part to plugin to DR CoN as it will mean no more having to manually register services with Consul.
 
-#Consul Template
+##Consul Template
 
 [Consul Template](https://hashicorp.com/blog/introducing-consul-template.html) uses Consul to update files and execute commands when it detects the services in Consul have changed. 
 
@@ -243,7 +243,7 @@ docker run -it \
 
 `SERVICE` is query used to select which services to include from Consul. So this DR CoN container will now load balance across all services names `simple`.
 
-#All Together
+##All Together
 
 Lets now plug everything together!
 
@@ -310,11 +310,11 @@ Requests will now be load balances across the two services.
 
 A fun thing to do is to run `while true; do curl $DOCKER_IP:80; sleep 1; done` while killing and starting simple services and see that this all happens so fast no requests get dropped.
 
-# Conclusion
+## Conclusion
 
 Architectures like DR CoN are much easier to describe, distribute and implement using Docker and are impossible without good tools like Consul. Plugging things together and playing with Docker's ever more powerful tools fun and useful. Now I can create a horizontally scalable architecture and have everything just work.
 
-# Further Reading
+## Further Reading
 
 [The Docker Book](http://www.amazon.com/gp/product/B00LRROTI4/ref=as_li_qf_sp_asin_il_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=B00LRROTI4&linkCode=as2&tag=maor01-20&linkId=2QKZTS7EW7H2VZRM)
 
